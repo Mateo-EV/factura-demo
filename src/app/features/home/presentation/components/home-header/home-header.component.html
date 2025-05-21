@@ -1,0 +1,56 @@
+<header
+  class="fixed inset-x-0 top-0 z-20 flex h-32 translate-y-0 bg-white transition-all duration-300"
+>
+  <div
+    class="z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-6 sm:px-10 xl:px-6"
+  >
+    <div class="flex items-center gap-2">
+      <lucide-icon [img]="HomeIcon" class="text-primary [&>svg]:size-8" />
+      <span class="text-primary text-2xl font-bold">Acme</span>
+    </div>
+    <div class="flex items-center">
+      <div class="hidden items-center gap-12 lg:flex">
+        @for (item of menuItems; track $index; let i = $index) {
+          <a
+            appButton
+            variant="link"
+            size="link"
+            class="text-foreground text-base font-bold"
+          >
+            <span>{{ item.label }}</span>
+          </a>
+        }
+        <button appButton size="lg">Contactar a Ventas</button>
+      </div>
+      <button
+        appButton
+        variant="ghost"
+        class="lg:hidden"
+        (click)="toggleIsMobileMenuOpen()"
+      >
+        <lucide-icon [img]="isMobileMenuOpen() ? XIcon : MenuIcon" />
+      </button>
+    </div>
+  </div>
+
+  @if (isMobileMenuOpen()) {
+    <div
+      class="fixed inset-x-0 top-0 z-20 translate-y-32 bg-white transition duration-300 lg:hidden"
+    >
+      @for (item of menuItems; track $index; let i = $index) {
+        <a
+          [routerLink]="item.href"
+          class="flex items-center justify-between border-t border-gray-200 p-6"
+          [class.border-b]="i === menuItems.length - 1"
+        >
+          <span>{{ item.label }}</span>
+          <lucide-icon [img]="MoveUpRightIcon" />
+        </a>
+      }
+    </div>
+    <div
+      class="fixed inset-0 z-10 h-screen lg:hidden"
+      (click)="toggleIsMobileMenuOpen()"
+    ></div>
+  }
+</header>

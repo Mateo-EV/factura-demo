@@ -1,0 +1,26 @@
+<div class="px-10 max-w-lg mx-auto py-20">
+  <div class="mb-8">
+    <lucide-icon [img]="HomeIcon" class="text-primary" />
+  </div>
+  <h1 class="mb-6 text-3xl font-bold leading-snug">Iniciar Sesión</h1>
+  <form class="w-full">
+    <div class="mb-5">
+      <label appLabel class="mb-2">Usuario o correo electrónico</label>
+      <input appInput type="text" />
+    </div>
+    <div class="mb-5">
+      <div class="flex mb-2 items-center justify-between">
+        <label appLabel>Contraseña</label>
+        <a href="/password-reset" appButton variant="link" size="link">¿Olvidó su contraseña?</a>
+      </div>
+      <input appInput type="password" />
+    </div>
+
+    <button appButton variant="primary" size="lg" class="font-bold w-full">Ingresar</button>
+  </form>
+  <div class="mt-6">
+    <p class="text-xs text-muted-foreground text-center">
+      ¿No tienes una cuenta? <a href="/register" appButton variant="link" size="link">Regístrate</a>
+    </p>
+  </div>
+</div>

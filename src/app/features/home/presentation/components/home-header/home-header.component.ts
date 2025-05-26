@@ -1,4 +1,3 @@
-import { ButtonDirective } from "@/core/ui/directives";
 import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import {
@@ -8,10 +7,11 @@ import {
   MoveUpRightIcon,
   XIcon,
 } from "lucide-angular";
+import { ButtonModule } from "primeng/button";
 
 @Component({
   selector: "app-home-header",
-  imports: [LucideAngularModule, ButtonDirective, RouterLink],
+  imports: [LucideAngularModule, ButtonModule, RouterLink],
   templateUrl: "./home-header.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

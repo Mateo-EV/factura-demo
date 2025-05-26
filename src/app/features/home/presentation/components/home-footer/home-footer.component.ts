@@ -1,4 +1,3 @@
-import { ButtonDirective } from "@/core/ui/directives";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { HomeIcon, LucideAngularModule } from "lucide-angular";
@@ -13,12 +12,7 @@ import {
 
 @Component({
   selector: "app-home-footer",
-  imports: [
-    LucideAngularModule,
-    ButtonDirective,
-    RouterLink,
-    FontAwesomeModule,
-  ],
+  imports: [LucideAngularModule, RouterLink, FontAwesomeModule],
   templateUrl: "./home-footer.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

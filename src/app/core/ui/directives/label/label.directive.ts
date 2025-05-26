@@ -1,33 +1,33 @@
 import { cn } from "@/core/utils";
-import {
-  Directive,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  Renderer2,
-} from "@angular/core";
+import { Directive, computed, inject, input, signal } from "@angular/core";
+import { type VariantProps, cva } from "class-variance-authority";
+import type { ClassValue } from "clsx";
 
-const labelClasses =
-  "text-sm font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block";
+export const labelVariants = cva(
+  "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block",
+);
+export type LabelVariants = VariantProps<typeof labelVariants>;
 
 @Directive({
   selector: "[appLabel]",
   standalone: true,
+  host: {
+    "[class]": "_computedClass()",
+  },
 })
 export class LabelDirective {
-  readonly class = input<string | undefined>(undefined);
+  public readonly userClass = input<ClassValue>("", { alias: "class" });
+  public readonly error = input<boolean | undefined>(false, {
+    alias: "hasError",
+  });
 
-  readonly el = inject(ElementRef);
-  readonly renderer = inject(Renderer2);
+  private readonly _additionalClasses = signal<ClassValue>("");
 
-  constructor() {
-    effect(() => {
-      this.applyClasses(cn(labelClasses, this.class()));
-    });
-  }
+  protected readonly _computedClass = computed(() =>
+    cn(labelVariants(), this.userClass(), this.error() && "text-red-500"),
+  );
 
-  private applyClasses(classes: string) {
-    this.renderer.setAttribute(this.el.nativeElement, "class", classes);
+  public setClass(classes: string): void {
+    this._additionalClasses.set(classes);
   }
 }

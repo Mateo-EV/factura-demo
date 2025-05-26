@@ -17,10 +17,9 @@
       >
         @for (link of footerLinks; track $index; let i = $index) {
           <a
-            appButton
             variant="link"
             size="link"
-            class="text-foreground"
+            class="p-button p-button-link text-surface-700"
             [routerLink]="link.href"
           >
             {{ link.label }}

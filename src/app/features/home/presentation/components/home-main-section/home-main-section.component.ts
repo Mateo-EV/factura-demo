@@ -1,9 +1,9 @@
-import { ButtonDirective } from "@/core/ui/directives";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ButtonModule } from "primeng/button";
 
 @Component({
   selector: "app-home-main-section",
-  imports: [ButtonDirective],
+  imports: [ButtonModule],
   templateUrl: "./home-main-section.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

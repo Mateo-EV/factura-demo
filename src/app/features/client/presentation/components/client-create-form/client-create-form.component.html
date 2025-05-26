@@ -1,0 +1,42 @@
+<form [formGroup]="clientCreateForm" class="space-y-4">
+  <div class="space-y-2">
+    <label
+      appLabel
+      [hasError]="
+        clientCreateForm.get('name')?.invalid &&
+        clientCreateForm.get('name')?.touched
+      "
+      for="name"
+      >Name</label
+    >
+    <input id="name" pInputText formControlName="name" class="w-full" />
+  </div>
+  <div class="space-y-2">
+    <label
+      appLabel
+      [hasError]="
+        clientCreateForm.get('email')?.invalid &&
+        clientCreateForm.get('email')?.touched
+      "
+      for="email"
+      >Email</label
+    >
+    <input id="email" pInputText formControlName="email" class="w-full" />
+  </div>
+  <div class="space-y-2">
+    <label
+      appLabel
+      [hasError]="
+        clientCreateForm.get('phone')?.invalid &&
+        clientCreateForm.get('phone')?.touched
+      "
+      for="phone"
+      >Phone</label
+    >
+    <input id="phone" pInputText formControlName="phone" class="w-full" />
+  </div>
+  <div class="flex w-full justify-between">
+    <p-button severity="secondary" type="button">Cancelar</p-button>
+    <p-button type="submit">Guardar</p-button>
+  </div>
+</form>

@@ -1,19 +1,12 @@
-import {
-  ButtonDirective,
-  InputDirective,
-  LabelDirective,
-} from "@/core/ui/directives";
+import { LabelDirective } from "@/core/ui/directives";
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { LucideAngularModule, HomeIcon } from "lucide-angular";
+import { HomeIcon, LucideAngularModule } from "lucide-angular";
+import { ButtonModule } from "primeng/button";
+import { InputTextModule } from "primeng/inputtext";
 
 @Component({
   selector: "app-login-page",
-  imports: [
-    LucideAngularModule,
-    ButtonDirective,
-    LabelDirective,
-    InputDirective,
-  ],
+  imports: [LucideAngularModule, LabelDirective, ButtonModule, InputTextModule],
   templateUrl: "./login-page.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

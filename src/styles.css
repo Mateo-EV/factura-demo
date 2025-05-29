@@ -45,4 +45,15 @@
   .p-inputtext.ng-invalid.ng-dirty {
     @apply border-red-500;
   }
+
+  .p-floatlabel-on {
+    @apply has-[p-message]:mb-4;
+  }
+  .p-floatlabel-on > app-form-error-message > p-message {
+    @apply absolute inset-x-0 top-full
+  }
+
+  .p-button svg {
+    @apply size-4;
+  }
 }

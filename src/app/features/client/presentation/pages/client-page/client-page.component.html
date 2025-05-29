@@ -7,9 +7,10 @@
     <p-table [value]="clients()">
       <ng-template #header>
         <tr>
-          <th>Name</th>
+          <th class="w-[300px]">Name</th>
           <th>Email</th>
           <th>Phone</th>
+          <th>Acciones</th>
         </tr>
       </ng-template>
       <ng-template #body let-client>
@@ -17,13 +18,46 @@
           <td>{{ client.name }}</td>
           <td>{{ client.email }}</td>
           <td>{{ client.phone }}</td>
+          <td>
+            <p-button
+              severity="warn"
+              class="mr-2"
+              (click)="openEditModal(client.id)"
+            >
+              <lucide-icon [img]="editIcon" />
+            </p-button>
+            <p-button
+              severity="danger"
+              (click)="confirmDelete($event, client.id)"
+            >
+              <lucide-icon [img]="deleteIcon" />
+            </p-button>
+          </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
 </div>
-<p-dialog [(visible)]="createModalIsOpen" header="Crear Cliente">
+<p-dialog [(visible)]="createModalIsOpen" header="Crear Cliente" [modal]="true">
   <ng-template pTemplate="content">
-    <app-client-create-form />
+    <app-client-create-form
+      (onSubmitCancelled)="closeCreateModal()"
+      (onSubmitSuccess)="closeCreateModal()"
+    />
   </ng-template>
 </p-dialog>
+<p-dialog
+  [visible]="editModalIsOpen()"
+  header="Editar Cliente"
+  [modal]="true"
+  (visibleChange)="editModalIsOpen() && closeEditModal()"
+>
+  <ng-template pTemplate="content">
+    <app-client-edit-form
+      [clientId]="clientIdToEdit()!"
+      (onSubmitCancelled)="closeEditModal()"
+      (onSubmitSuccess)="closeEditModal()"
+    />
+  </ng-template>
+</p-dialog>
+<p-confirmdialog />

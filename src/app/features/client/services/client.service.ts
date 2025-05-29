@@ -14,11 +14,19 @@ export interface CreateClient {
   phone: string;
 }
 
+export interface EditClient {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
 export class ClientService {
-  private clients = signal(new Map<number, Client>());
+  private state = signal({
+    clients: new Map<number, Client>(),
+  });
   private clientId = 0;
 
   constructor() {
@@ -49,17 +57,18 @@ export class ClientService {
 
     of(clients).subscribe((data) => {
       data.forEach((client) => {
-        this.clients().set(client.id, client);
+        this.state().clients.set(client.id, client);
+        this.clientId++;
       });
     });
   }
 
   getFormattedClients(): Client[] {
-    return Array.from(this.clients().values());
+    return Array.from(this.state().clients.values());
   }
 
   getClientById(id: number): Client | undefined {
-    return this.clients().get(id);
+    return this.state().clients.get(id);
   }
 
   createClient(client: CreateClient): void {
@@ -68,19 +77,32 @@ export class ClientService {
       id: newId,
       ...client,
     };
-    this.clients().set(newId, newClient);
+    this.state.update((clientsMap) => ({
+      ...clientsMap,
+      clients: clientsMap.clients.set(newId, newClient),
+    }));
     this.clientId = newId;
   }
 
-  updateClient(id: number, updatedClient: Partial<Client>): void {
-    const client = this.clients().get(id);
+  updateClient(id: number, updatedClient: EditClient): void {
+    const client = this.state().clients.get(id);
     if (client) {
       const updatedData = { ...client, ...updatedClient };
-      this.clients().set(id, updatedData);
+      this.state.update((clientsMap) => ({
+        ...clientsMap,
+        clients: clientsMap.clients.set(id, updatedData),
+      }));
     }
   }
 
   deleteClient(id: number): void {
-    this.clients().delete(id);
+    this.state.update((clientsMap) => {
+      const newClients = new Map(clientsMap.clients);
+      newClients.delete(id);
+      return {
+        ...clientsMap,
+        clients: newClients,
+      };
+    });
   }
 }

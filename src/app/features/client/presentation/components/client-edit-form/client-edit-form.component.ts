@@ -1,12 +1,15 @@
 import { FormErrorMessageComponent } from "@/core/ui/components/form/form-error-message/form-error-message.component";
 import {
+  Client,
   ClientService,
-  type CreateClient,
+  EditClient,
 } from "@/features/client/services/client.service";
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
+  OnInit,
   output,
 } from "@angular/core";
 import {
@@ -21,12 +24,12 @@ import { FloatLabelModule } from "primeng/floatlabel";
 import { InputTextModule } from "primeng/inputtext";
 import { MessageModule } from "primeng/message";
 
-type CreateClientForm = {
-  [K in keyof CreateClient]: FormControl<CreateClient[K]>;
+type EditClientForm = {
+  [K in keyof EditClient]: FormControl<EditClient[K]>;
 };
 
 @Component({
-  selector: "app-client-create-form",
+  selector: "app-client-edit-form",
   imports: [
     ButtonModule,
     ReactiveFormsModule,
@@ -35,15 +38,19 @@ type CreateClientForm = {
     MessageModule,
     FormErrorMessageComponent,
   ],
-  templateUrl: "./client-create-form.component.html",
+  templateUrl: "./client-edit-form.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientCreateFormComponent {
+export class ClientEditFormComponent implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
 
-  readonly clientCreateForm: FormGroup<CreateClientForm> =
-    this.fb.group<CreateClientForm>({
-      name: this.fb.control("", { validators: [Validators.required] }),
+  readonly clientId = input.required<number>();
+
+  readonly clientEditForm: FormGroup<EditClientForm> =
+    this.fb.group<EditClientForm>({
+      name: this.fb.control("", {
+        validators: [Validators.required],
+      }),
       email: this.fb.control("", {
         validators: [Validators.required, Validators.email],
       }),
@@ -52,26 +59,40 @@ export class ClientCreateFormComponent {
       }),
     });
 
+  ngOnInit() {
+    const client = this.clientService.getClientById(this.clientId())!;
+
+    this.clientEditForm.reset({
+      name: client.name,
+      email: client.email,
+      phone: client.phone,
+    });
+  }
+
   private readonly clientService = inject(ClientService);
 
   readonly onSubmitCancelled = output<void>();
   readonly onSubmitSuccess = output<void>();
 
   onSubmit() {
-    if (!this.clientCreateForm.valid) {
-      Object.values(this.clientCreateForm.controls).forEach((control) =>
+    if (!this.clientEditForm.valid) {
+      Object.values(this.clientEditForm.controls).forEach((control) =>
         control.markAsDirty(),
       );
       return;
     }
 
-    this.clientService.createClient({
-      name: this.clientCreateForm.value.name!,
-      email: this.clientCreateForm.value.email!,
-      phone: this.clientCreateForm.value.phone!,
+    this.clientService.updateClient(this.clientId(), {
+      name: this.clientEditForm.value.name!,
+      email: this.clientEditForm.value.email!,
+      phone: this.clientEditForm.value.phone!,
     });
 
-    this.clientCreateForm.reset();
+    this.clientEditForm.reset({
+      name: this.clientEditForm.value.name!,
+      email: this.clientEditForm.value.email!,
+      phone: this.clientEditForm.value.phone!,
+    });
     this.onSubmitSuccess.emit();
   }
 }
